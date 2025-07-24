@@ -35,7 +35,7 @@ export default function CheckoutForm({ cartItems, total }: { cartItems: any[], t
     setError(null);
 
     try {
-      // THE FIX IS HERE: This object now perfectly matches the OrderData interface.
+      // This object now perfectly matches the OrderData interface.
       const newOrder = {
         ...formData, // Spreads name, email, phone, address
         items: cartItems,
