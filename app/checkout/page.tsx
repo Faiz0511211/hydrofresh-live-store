@@ -1,4 +1,4 @@
-'use client'; // This is important - it makes the page interactive
+'use client'; // This is the most important line
 
 import CheckoutForm from './CheckoutForm';
 import Header from '@/components/Header';
@@ -6,13 +6,11 @@ import Footer from '@/components/Footer';
 import { useState, useEffect } from 'react';
 
 export default function CheckoutPage() {
-  // In a real app, this data would come from a global cart state.
-  // For now, we use placeholder data to fix the build and allow functionality.
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
 
-  // This is a temporary solution to get cart data.
   useEffect(() => {
+    // Safely access localStorage only on the client
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
       const parsedCart = JSON.parse(storedCart);
@@ -21,7 +19,6 @@ export default function CheckoutPage() {
       setTotal(newTotal);
     }
   }, []);
-
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

@@ -1,18 +1,16 @@
-
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAlhH8Zqt7b2NaRcmsnnxrwpeew4ROdti4",
-  authDomain: "hydrofresh-store-live.firebaseapp.com",
-  projectId: "hydrofresh-store-live",
-  storageBucket: "hydrofresh-store-live.firebasestorage.app",
-  messagingSenderId: "29650876292",
-  appId: "1:29650876292:web:162a05702b51736af30fd1",
-  measurementId: "G-BSE0FH4QHE"
+  apiKey: "AIzaSyCL1wojiPJ1vRhgydRLl6KvSil05vMjnZw",
+  authDomain: "hydro-fresh-store.firebaseapp.com",
+  projectId: "hydro-fresh-store",
+  storageBucket: "hydro-fresh-store.appspot.com",
+  messagingSenderId: "1090699587135",
+  appId: "1:1090699587135:web:653e70dd244c5cc9c1928a"
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const analytics = getAnalytics(app);
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const db = getFirestore(app);
+
+export { db };
