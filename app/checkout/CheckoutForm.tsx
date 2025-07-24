@@ -24,7 +24,6 @@ export default function CheckoutForm({ cartItems, total }: { cartItems: any[], t
   const [orderId, setOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // THE FIX IS HERE: We've added the correct type for the 'e' parameter.
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -38,8 +37,10 @@ export default function CheckoutForm({ cartItems, total }: { cartItems: any[], t
     setError(null);
 
     try {
+      // THE FIX IS HERE: We are now creating a "flat" object that
+      // matches what the saveOrder function expects.
       const newOrder = {
-        customerDetails: formData,
+        ...formData, // This spreads the name, email, phone, etc. directly
         items: cartItems,
         total,
         status: 'new',
@@ -67,7 +68,6 @@ export default function CheckoutForm({ cartItems, total }: { cartItems: any[], t
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Form fields will be dynamically generated here by the AI's code */}
       <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
           <input type="text" id="name" name="name" value={formData.name} onChange={handleInputChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required />
@@ -84,8 +84,6 @@ export default function CheckoutForm({ cartItems, total }: { cartItems: any[], t
           <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
           <textarea id="address" name="address" value={formData.address} onChange={handleInputChange} rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" required></textarea>
       </div>
-
-      {/* Payment Method etc. would go here */}
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
