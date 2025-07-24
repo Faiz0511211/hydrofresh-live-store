@@ -1,67 +1,42 @@
 'use client';
-
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useState } from 'react';
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  const updateCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCartCount(cart.reduce((acc: number, item: any) => acc + item.quantity, 0));
+  };
+
+  useEffect(() => {
+    updateCartCount(); // Initial count
+    window.addEventListener('cartUpdated', updateCartCount);
+    return () => {
+      window.removeEventListener('cartUpdated', updateCartCount);
+    };
+  }, []);
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-green-800" style={{ fontFamily: 'Pacifico, serif' }}>
-              HydroFresh
-            </Link>
-          </div>
-          
-          <nav className="hidden md:flex space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-green-600 font-medium">
-              Home
-            </Link>
-            <Link href="/products" className="text-gray-700 hover:text-green-600 font-medium">
-              Products
-            </Link>
-            <Link href="/our-method" className="text-gray-700 hover:text-green-600 font-medium">
-              Our Method
-            </Link>
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <Link href="/cart">
-              <button className="relative p-2 text-gray-600 hover:text-green-600 cursor-pointer">
-                <i className="ri-shopping-cart-line text-xl w-6 h-6 flex items-center justify-center"></i>
-                <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  3
-                </span>
-              </button>
-            </Link>
-            
-            <button 
-              className="md:hidden p-2 text-gray-600 hover:text-green-600"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <i className="ri-menu-line text-xl w-6 h-6 flex items-center justify-center"></i>
-            </button>
-          </div>
-        </div>
-        
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link href="/" className="block px-3 py-2 text-gray-700 hover:text-green-600">
-                Home
-              </Link>
-              <Link href="/products" className="block px-3 py-2 text-gray-700 hover:text-green-600">
-                Products
-              </Link>
-              <Link href="/our-method" className="block px-3 py-2 text-gray-700 hover:text-green-600">
-                Our Method
-              </Link>
-            </div>
-          </div>
-        )}
+    <header className="bg-white shadow-md">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <Link href="/" className="text-2xl font-bold text-green-700">
+          HydroFresh
+        </Link>
+        <nav className="space-x-4">
+          <Link href="/" className="text-gray-600 hover:text-green-700">Home</Link>
+          <Link href="/products" className="text-gray-600 hover:text-green-700">Products</Link>
+          <Link href="/our-method" className="text-gray-600 hover:text-green-700">Our Method</Link>
+        </nav>
+        <Link href="/cart" className="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{cartCount}</span>
+          )}
+        </Link>
       </div>
     </header>
   );
