@@ -9,7 +9,6 @@ interface FormData {
   email: string;
   phone: string;
   address: string;
-  paymentMethod: string;
 }
 
 export default function CheckoutForm({ cartItems, total }: { cartItems: any[], total: number }) {
@@ -18,7 +17,6 @@ export default function CheckoutForm({ cartItems, total }: { cartItems: any[], t
     email: '',
     phone: '',
     address: '',
-    paymentMethod: 'cod',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
@@ -37,14 +35,12 @@ export default function CheckoutForm({ cartItems, total }: { cartItems: any[], t
     setError(null);
 
     try {
-      // THE FIX IS HERE: We are now creating a "flat" object that
-      // matches what the saveOrder function expects.
+      // THE FIX IS HERE: This object now perfectly matches the OrderData interface.
       const newOrder = {
-        ...formData, // This spreads the name, email, phone, etc. directly
+        ...formData, // Spreads name, email, phone, address
         items: cartItems,
         total,
         status: 'new',
-        createdAt: new Date(),
       };
       const id = await saveOrder(newOrder);
       setOrderId(id);
